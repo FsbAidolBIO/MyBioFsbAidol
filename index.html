@@ -92,7 +92,12 @@
         .compact .actions { margin-top: 12px; }
         .compact .name { font-size: 22px; }
         .compact .avatar { width: 100px; height: 100px; }
-        .compact .mountains-block { height: 40px; margin-top: 5px; margin-bottom: 5px; }
+        /* Горы в компактном режиме опущены на 20px, чтобы не касаться тегов */
+        .compact .mountains-block {
+            height: 40px;
+            margin-top: 5px;
+            margin-bottom: 20px;
+        }
 
         .scroll-top-btn {
             position: fixed;
@@ -280,7 +285,7 @@
         /* БЛОК ГОР (исправлено позиционирование) */
         .mountains-block {
             width: 100%;
-            height: 50px; /* уменьшено, чтобы не касаться тегов */
+            height: 50px;
             margin-top: 12px;
             margin-bottom: 6px;
             opacity: 0;
@@ -618,7 +623,7 @@
                 <span class="tag">🌙 Ночь</span>
             </div>
 
-            <!-- ЖИВОЙ БЛОК ГОР (исправлен) -->
+            <!-- ЖИВОЙ БЛОК ГОР -->
             <div class="mountains-block" id="mountainsBlock">
                 <svg class="mountains-svg" viewBox="0 0 400 80" preserveAspectRatio="none">
                     <polygon points="0,80 0,40 50,20 100,45 150,10 200,35 250,15 300,30 350,5 400,25 400,80" fill="rgba(124,58,237,0.3)"/>
@@ -813,7 +818,6 @@
                 var t = themes[themeIndex];
                 document.body.style.background = t.bg;
                 profileCard.style.background = t.card;
-                // Меняем цвет текста в зависимости от светлой/тёмной темы
                 if (t.light) {
                     document.body.style.color = '#1a1a1a';
                     profileCard.style.color = '#1a1a1a';
