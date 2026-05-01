@@ -42,6 +42,21 @@
             0% { transform: translateY(0) scale(1); opacity: 1; }
             100% { transform: translateY(-80px) scale(1.5); opacity: 0; }
         }
+        @keyframes rotateBorder {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes breathe {
+            0% { box-shadow: 0 0 8px rgba(99, 102, 241, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.6); }
+            100% { box-shadow: 0 0 8px rgba(99, 102, 241, 0.3); }
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         .profile-card {
             width: 100%;
             background: rgba(15, 18, 30, 0.55);
@@ -55,9 +70,20 @@
             flex-direction: column;
             align-items: center;
             border: 1px solid rgba(255,255,255,0.08);
-            transition: transform 0.1s ease-out, background 0.5s ease;
+            transition: transform 0.1s ease-out, background 0.5s ease, box-shadow 0.5s ease;
             position: relative;
             overflow: hidden;
+        }
+        /* Анимированный фоновый градиент карточки */
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(79,70,229,0.1), rgba(236,72,153,0.05), rgba(124,58,237,0.15));
+            background-size: 300% 300%;
+            animation: gradientShift 8s ease infinite;
+            z-index: -1;
+            border-radius: 32px;
         }
         .compact { padding: 20px 18px; }
         .compact .info-grid { margin-top: 14px; }
@@ -85,14 +111,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s;
+            transition: opacity 0.4s ease, transform 0.3s ease;
             opacity: 0;
             pointer-events: none;
         }
         .scroll-top-btn.visible { opacity: 1; pointer-events: auto; }
         .scroll-top-btn:hover { background: rgba(124, 58, 237, 0.7); transform: scale(1.1); }
 
-        .avatar-wrapper { position: relative; cursor: pointer; }
+        .avatar-wrapper { position: relative; cursor: pointer; display: inline-block; }
         .avatar {
             width: 120px;
             height: 120px;
@@ -103,13 +129,29 @@
             opacity: 0;
             animation: fadeInUp 0.6s 0.2s forwards;
             transition: transform 0.3s;
+            position: relative;
+            z-index: 1;
         }
         .avatar-wrapper:hover .avatar { transform: scale(1.05); }
+        /* Вращающаяся градиентная рамка */
+        .avatar-wrapper::after {
+            content: '';
+            position: absolute;
+            top: -4px; left: -4px; right: -4px; bottom: -4px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #7c3aed, #a78bfa, #f59e0b, #7c3aed);
+            background-size: 300% 300%;
+            z-index: 0;
+            animation: rotateBorder 4s linear infinite;
+            opacity: 0.7;
+            -webkit-mask: radial-gradient(transparent 58%, black 60%);
+        }
         .floating-emoji {
             position: absolute;
             pointer-events: none;
             animation: floatEmoji 1s forwards;
             font-size: 18px;
+            z-index: 2;
         }
         .name {
             margin-top: 12px;
@@ -117,7 +159,9 @@
             font-weight: 600;
             opacity: 0;
             animation: fadeInUp 0.6s 0.35s forwards;
+            transition: text-shadow 0.3s;
         }
+        .name:hover { text-shadow: 0 0 15px rgba(124, 58, 237, 0.8); }
         .bio {
             margin-top: 4px;
             font-size: 13px;
@@ -151,7 +195,7 @@
             50% { transform: scale(1.15); opacity: 1; }
             100% { transform: scale(0.95); opacity: 0.8; }
         }
-        .battery {
+        .battery, .wifi-icon {
             display: flex; align-items: center; gap: 3px;
             font-size: 11px; color: #8b8fa6;
         }
@@ -186,11 +230,28 @@
             align-items: center; gap: 6px;
             font-size: 13px; backdrop-filter: blur(8px);
             cursor: pointer;
+            position: relative;
         }
         .info-tile:hover {
             background: rgba(124, 58, 237, 0.15);
             border-color: rgba(124, 58, 237, 0.35);
             transform: translateY(-2px);
+        }
+        /* Tooltip */
+        .info-tile[data-tooltip]:hover::before {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: -28px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 10px;
+            white-space: nowrap;
+            z-index: 5;
+            pointer-events: none;
         }
         .tile-label { font-size: 10px; color: #8b8fa6; text-transform: uppercase; }
         .tile-value { font-weight: 500; color: #e2e8f0; font-size: 14px; }
@@ -206,7 +267,11 @@
             font-size: 11px; color: #c4b5fd;
             transition: all 0.2s; cursor: default;
         }
-        .tag:hover { background: rgba(124, 58, 237, 0.3); transform: scale(1.05); }
+        .tag:hover {
+            background: rgba(124, 58, 237, 0.3);
+            transform: scale(1.05);
+            box-shadow: 0 0 12px rgba(124, 58, 237, 0.5);
+        }
 
         /* БЛОК ГОР */
         .mountains-block {
@@ -237,7 +302,7 @@
             filter: drop-shadow(0 0 4px rgba(255,255,255,0.6));
         }
 
-        /* ГАЛЕРЕЯ – теперь все подписи "Утренние горы" */
+        /* ГАЛЕРЕЯ */
         .gallery {
             display: flex;
             gap: 10px;
@@ -301,7 +366,7 @@
             position: fixed;
             top: 20px;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translateX(-50%) translateY(-30px);
             padding: 10px 20px;
             border-radius: 20px;
             font-size: 13px;
@@ -309,10 +374,10 @@
             z-index: 100;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.3s ease, transform 0.3s ease;
             color: white;
         }
-        .toast.show { opacity: 1; }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
         .toast.purple { background: rgba(124, 58, 237, 0.9); }
         .toast.green { background: rgba(34, 197, 94, 0.9); }
         .toast.pink { background: rgba(236, 72, 153, 0.9); }
@@ -481,7 +546,10 @@
             font-size: 14px;
             background: transparent;
         }
-        .btn-write { background: rgba(99, 102, 241, 0.3); }
+        .btn-write {
+            background: rgba(99, 102, 241, 0.3);
+            animation: breathe 3s infinite;
+        }
         .btn-write:hover { background: rgba(99, 102, 241, 0.5); transform: translateY(-2px); }
         .btn-share { background: rgba(255,255,255,0.05); color: #c4b5fd; }
         .btn-share:hover { background: rgba(255,255,255,0.12); color: white; transform: translateY(-2px); }
@@ -527,6 +595,7 @@
                 <span class="online-dot"></span> Возможно в сети
                 <span id="clockDisplay" style="color:#8b8fa6;font-size:11px;">00:00</span>
                 <span class="age-badge" id="ageBadge">14 лет</span>
+                <span class="wifi-icon" title="Wi-Fi">📶</span>
                 <span class="battery" id="batteryDisplay">
                     <span class="battery-icon"><span class="battery-fill" id="batteryFill" style="width:80%;"></span></span>
                     <span id="batteryPercent">80%</span>
@@ -549,7 +618,7 @@
                 <span class="sun-moon" id="sunMoon">🌙</span>
             </div>
 
-            <!-- МИНИ-ГАЛЕРЕЯ (все подписи "Утренние горы") -->
+            <!-- МИНИ-ГАЛЕРЕЯ -->
             <div class="gallery">
                 <div class="gallery-item" style="background-image: url('gallery1.jpg');" onclick="showToast('Утренние горы', 'purple')"></div>
                 <div class="gallery-item" style="background-image: url('gallery2.jpg');" onclick="showToast('Утренние горы', 'purple')"></div>
@@ -557,11 +626,11 @@
             </div>
 
             <div class="info-grid">
-                <div class="info-tile" onclick="copyText('@FsbAidol')">
+                <div class="info-tile" data-tooltip="Нажми, чтобы скопировать" onclick="copyText('@FsbAidol')">
                     <span class="tile-label">ЮЗЕРНЕЙМ</span>
                     <span class="tile-value">@FsbAidol</span>
                 </div>
-                <div class="info-tile" onclick="copyText('955339251')">
+                <div class="info-tile" data-tooltip="Нажми, чтобы скопировать" onclick="copyText('955339251')">
                     <span class="tile-label">ID</span>
                     <span class="tile-value">955339251</span>
                 </div>
@@ -635,12 +704,14 @@
                 particles.push({
                     x: Math.random() * canvas.width, y: Math.random() * canvas.height,
                     dx: (Math.random() - 0.5) * 2.2, dy: (Math.random() - 0.5) * 2.2,
-                    r: Math.random() * 1.8 + 1
+                    r: Math.random() * 1.8 + 0.8, // чуть больше минимальный размер
+                    twinkle: Math.random() * Math.PI * 2
                 });
             }
 
             function draw() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
+                var time = Date.now() * 0.001; // для мерцания
                 for (var a = 0; a < particles.length; a++) {
                     for (var b = a + 1; b < particles.length; b++) {
                         var dx = particles[a].x - particles[b].x;
@@ -662,8 +733,11 @@
                     p.x += p.dx; p.y += p.dy;
                     if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
                     if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+                    // Мерцание: прозрачность колеблется в зависимости от времени и начальной фазы
+                    var alpha = 0.5 + 0.5 * Math.sin(time * 3 + p.twinkle);
                     ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                    ctx.fillStyle = "rgba(255,255,255,0.75)"; ctx.fill();
+                    ctx.fillStyle = "rgba(255,255,255," + alpha + ")";
+                    ctx.fill();
                 });
                 requestAnimationFrame(draw);
             }
