@@ -17,7 +17,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.5s ease;
+            transition: background 0.5s ease, color 0.5s ease;
         }
         canvas { position: fixed; top: 0; left: 0; z-index: 0; }
         .container {
@@ -70,11 +70,10 @@
             flex-direction: column;
             align-items: center;
             border: 1px solid rgba(255,255,255,0.08);
-            transition: transform 0.1s ease-out, background 0.5s ease, box-shadow 0.5s ease;
+            transition: transform 0.1s ease-out, background 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease;
             position: relative;
             overflow: hidden;
         }
-        /* Анимированный фоновый градиент карточки */
         .profile-card::before {
             content: '';
             position: absolute;
@@ -84,6 +83,7 @@
             animation: gradientShift 8s ease infinite;
             z-index: -1;
             border-radius: 32px;
+            transition: background 0.5s ease;
         }
         .compact { padding: 20px 18px; }
         .compact .info-grid { margin-top: 14px; }
@@ -92,7 +92,7 @@
         .compact .actions { margin-top: 12px; }
         .compact .name { font-size: 22px; }
         .compact .avatar { width: 100px; height: 100px; }
-        .compact .mountains-block { transform: scale(0.8); margin-top: -5px; margin-bottom: -5px; }
+        .compact .mountains-block { height: 40px; margin-top: 5px; margin-bottom: 5px; }
 
         .scroll-top-btn {
             position: fixed;
@@ -111,7 +111,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: opacity 0.4s ease, transform 0.3s ease;
+            transition: opacity 0.4s ease, transform 0.3s ease, background 0.5s ease, color 0.5s ease, border-color 0.5s ease;
             opacity: 0;
             pointer-events: none;
         }
@@ -133,7 +133,6 @@
             z-index: 1;
         }
         .avatar-wrapper:hover .avatar { transform: scale(1.05); }
-        /* Вращающаяся градиентная рамка */
         .avatar-wrapper::after {
             content: '';
             position: absolute;
@@ -159,7 +158,7 @@
             font-weight: 600;
             opacity: 0;
             animation: fadeInUp 0.6s 0.35s forwards;
-            transition: text-shadow 0.3s;
+            transition: text-shadow 0.3s, color 0.5s ease;
         }
         .name:hover { text-shadow: 0 0 15px rgba(124, 58, 237, 0.8); }
         .bio {
@@ -170,6 +169,7 @@
             animation: fadeInUp 0.6s 0.38s forwards;
             line-height: 1.4;
             min-height: 18px;
+            transition: color 0.5s ease;
         }
         .status-row {
             display: flex;
@@ -182,6 +182,7 @@
             animation: fadeInUp 0.6s 0.45s forwards;
             flex-wrap: wrap;
             justify-content: center;
+            transition: color 0.5s ease;
         }
         .online-dot {
             width: 7px; height: 7px;
@@ -198,11 +199,13 @@
         .battery, .wifi-icon {
             display: flex; align-items: center; gap: 3px;
             font-size: 11px; color: #8b8fa6;
+            transition: color 0.5s ease;
         }
         .battery-icon {
             width: 20px; height: 10px;
             border: 1px solid #8b8fa6;
             border-radius: 2px; position: relative;
+            transition: border-color 0.5s ease;
         }
         .battery-fill {
             position: absolute; left: 1px; top: 1px; bottom: 1px;
@@ -212,6 +215,7 @@
             background: rgba(124, 58, 237, 0.2);
             padding: 2px 8px; border-radius: 10px;
             font-size: 11px; color: #c4b5fd;
+            transition: background 0.5s ease, color 0.5s ease;
         }
         .info-grid {
             display: grid;
@@ -237,7 +241,6 @@
             border-color: rgba(124, 58, 237, 0.35);
             transform: translateY(-2px);
         }
-        /* Tooltip */
         .info-tile[data-tooltip]:hover::before {
             content: attr(data-tooltip);
             position: absolute;
@@ -253,8 +256,8 @@
             z-index: 5;
             pointer-events: none;
         }
-        .tile-label { font-size: 10px; color: #8b8fa6; text-transform: uppercase; }
-        .tile-value { font-weight: 500; color: #e2e8f0; font-size: 14px; }
+        .tile-label { font-size: 10px; color: #8b8fa6; text-transform: uppercase; transition: color 0.5s ease; }
+        .tile-value { font-weight: 500; color: #e2e8f0; font-size: 14px; transition: color 0.5s ease; }
         .tags {
             display: flex; flex-wrap: wrap; gap: 6px;
             margin-top: 14px; justify-content: center;
@@ -265,7 +268,8 @@
             border: 1px solid rgba(124, 58, 237, 0.25);
             padding: 4px 10px; border-radius: 12px;
             font-size: 11px; color: #c4b5fd;
-            transition: all 0.2s; cursor: default;
+            transition: all 0.2s, background 0.5s ease, color 0.5s ease;
+            cursor: default;
         }
         .tag:hover {
             background: rgba(124, 58, 237, 0.3);
@@ -273,11 +277,12 @@
             box-shadow: 0 0 12px rgba(124, 58, 237, 0.5);
         }
 
-        /* БЛОК ГОР */
+        /* БЛОК ГОР (исправлено позиционирование) */
         .mountains-block {
             width: 100%;
-            height: 80px;
-            margin-top: 14px;
+            height: 50px; /* уменьшено, чтобы не касаться тегов */
+            margin-top: 12px;
+            margin-bottom: 6px;
             opacity: 0;
             animation: fadeInUp 0.6s 0.63s forwards;
             position: relative;
@@ -295,9 +300,9 @@
         }
         .sun-moon {
             position: absolute;
-            top: 8px;
-            right: 12px;
-            font-size: 20px;
+            top: 6px;
+            right: 10px;
+            font-size: 18px;
             transition: all 0.5s ease;
             filter: drop-shadow(0 0 4px rgba(255,255,255,0.6));
         }
@@ -351,7 +356,8 @@
             border: 1px solid rgba(255,255,255,0.06);
             border-radius: 16px; padding: 12px 6px;
             color: #c4b5fd; text-decoration: none;
-            transition: all 0.25s; backdrop-filter: blur(8px);
+            transition: all 0.25s, background 0.5s ease, color 0.5s ease;
+            backdrop-filter: blur(8px);
             font-size: 12px; font-weight: 500; cursor: pointer;
         }
         .link-btn:hover {
@@ -400,7 +406,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.3s, transform 0.3s;
+            transition: background 0.3s, transform 0.3s, color 0.3s, border-color 0.3s;
         }
         .theme-btn { bottom: 80px; }
         .compact-btn { bottom: 20px; }
@@ -422,10 +428,10 @@
             padding: 14px 16px;
             cursor: pointer;
             border: 1px solid rgba(255,255,255,0.08);
-            transition: all 0.3s;
+            transition: all 0.3s, background 0.5s ease, border-color 0.5s ease;
         }
         .music-header:hover { background: rgba(124, 58, 237, 0.15); }
-        .music-title { font-size: 15px; color: #c4b5fd; font-weight: 500; }
+        .music-title { font-size: 15px; color: #c4b5fd; font-weight: 500; transition: color 0.5s ease; }
         .arrow { transition: transform 0.3s ease; color: #a78bfa; }
         .music-header.expanded .arrow { transform: rotate(180deg); }
         .music-content {
@@ -437,6 +443,7 @@
             margin-top: -2px;
             border: 1px solid rgba(255,255,255,0.04);
             border-top: none;
+            transition: background 0.5s ease;
         }
         .music-content.open { max-height: 1000px; }
         .track-list { padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
@@ -468,8 +475,9 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            transition: color 0.5s ease;
         }
-        .track-artist { font-size: 11px; color: #9ca3af; margin-top: 2px; }
+        .track-artist { font-size: 11px; color: #9ca3af; margin-top: 2px; transition: color 0.5s ease; }
         .track-controls { display: flex; gap: 6px; }
         .t-btn {
             padding: 6px 10px;
@@ -485,7 +493,7 @@
         .btn-play:hover { background: #8b5cf6; transform: scale(1.05); }
         .btn-link { background: rgba(255,255,255,0.08); color: #c4b5fd; }
         .btn-link:hover { background: rgba(255,255,255,0.15); color: white; }
-        .time-display { font-size: 10px; color: #9ca3af; margin-left: 6px; white-space: nowrap; }
+        .time-display { font-size: 10px; color: #9ca3af; margin-left: 6px; white-space: nowrap; transition: color 0.5s ease; }
         .progress-bar {
             width: 100%;
             height: 3px;
@@ -572,6 +580,7 @@
             font-size: 11px; color: #8b8fa6;
             opacity: 0; animation: fadeInUp 0.6s 0.68s forwards;
             justify-content: center;
+            transition: color 0.5s ease;
         }
     </style>
 </head>
@@ -609,7 +618,7 @@
                 <span class="tag">🌙 Ночь</span>
             </div>
 
-            <!-- ЖИВОЙ БЛОК ГОР -->
+            <!-- ЖИВОЙ БЛОК ГОР (исправлен) -->
             <div class="mountains-block" id="mountainsBlock">
                 <svg class="mountains-svg" viewBox="0 0 400 80" preserveAspectRatio="none">
                     <polygon points="0,80 0,40 50,20 100,45 150,10 200,35 250,15 300,30 350,5 400,25 400,80" fill="rgba(124,58,237,0.3)"/>
@@ -704,14 +713,14 @@
                 particles.push({
                     x: Math.random() * canvas.width, y: Math.random() * canvas.height,
                     dx: (Math.random() - 0.5) * 2.2, dy: (Math.random() - 0.5) * 2.2,
-                    r: Math.random() * 1.8 + 0.8, // чуть больше минимальный размер
+                    r: Math.random() * 1.8 + 0.8,
                     twinkle: Math.random() * Math.PI * 2
                 });
             }
 
             function draw() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                var time = Date.now() * 0.001; // для мерцания
+                var time = Date.now() * 0.001;
                 for (var a = 0; a < particles.length; a++) {
                     for (var b = a + 1; b < particles.length; b++) {
                         var dx = particles[a].x - particles[b].x;
@@ -733,7 +742,6 @@
                     p.x += p.dx; p.y += p.dy;
                     if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
                     if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
-                    // Мерцание: прозрачность колеблется в зависимости от времени и начальной фазы
                     var alpha = 0.5 + 0.5 * Math.sin(time * 3 + p.twinkle);
                     ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
                     ctx.fillStyle = "rgba(255,255,255," + alpha + ")";
@@ -783,26 +791,51 @@
             });
             scrollTopBtn.addEventListener('click', function() { window.scrollTo({ top: 0, behavior: 'smooth' }); });
 
-            // Темы
+            // Темы с автонастройкой кнопок
             var themes = [
-                { bg: '#05070d', card: 'rgba(15, 18, 30, 0.55)', name: 'Midnight' },
-                { bg: '#0d0510', card: 'rgba(30, 15, 35, 0.55)', name: 'Void' },
-                { bg: '#100a05', card: 'rgba(35, 20, 15, 0.55)', name: 'Sunset' },
-                { bg: '#050d0a', card: 'rgba(15, 30, 25, 0.55)', name: 'Forest' },
-                { bg: '#1a0a1a', card: 'rgba(40, 20, 40, 0.55)', name: 'Sakura' },
-                { bg: '#0a0a1a', card: 'rgba(20, 20, 40, 0.55)', name: 'Ocean' },
-                { bg: '#1a1a0a', card: 'rgba(40, 40, 20, 0.55)', name: 'Desert' },
-                { bg: '#0a1a1a', card: 'rgba(20, 40, 40, 0.55)', name: 'Arctic' },
-                { bg: '#1a0a0a', card: 'rgba(40, 20, 20, 0.55)', name: 'Candy' },
-                { bg: '#0a0a0a', card: 'rgba(20, 20, 20, 0.55)', name: 'Obsidian' }
+                { bg: '#05070d', card: 'rgba(15, 18, 30, 0.55)', name: 'Midnight', light: false },
+                { bg: '#0d0510', card: 'rgba(30, 15, 35, 0.55)', name: 'Void', light: false },
+                { bg: '#100a05', card: 'rgba(35, 20, 15, 0.55)', name: 'Sunset', light: false },
+                { bg: '#050d0a', card: 'rgba(15, 30, 25, 0.55)', name: 'Forest', light: false },
+                { bg: '#1a0a1a', card: 'rgba(40, 20, 40, 0.55)', name: 'Sakura', light: false },
+                { bg: '#0a0a1a', card: 'rgba(20, 20, 40, 0.55)', name: 'Ocean', light: false },
+                { bg: '#1a1a0a', card: 'rgba(40, 40, 20, 0.55)', name: 'Desert', light: false },
+                { bg: '#0a1a1a', card: 'rgba(20, 40, 40, 0.55)', name: 'Arctic', light: false },
+                { bg: '#1a0a0a', card: 'rgba(40, 20, 20, 0.55)', name: 'Candy', light: false },
+                { bg: '#0a0a0a', card: 'rgba(20, 20, 20, 0.55)', name: 'Obsidian', light: false },
+                { bg: '#f5f5f7', card: 'rgba(255, 255, 255, 0.7)', name: 'Light', light: true }
             ];
             var themeIndex = parseInt(localStorage.getItem('themeIndex')) || 0;
+            var themeBtn = document.getElementById('themeBtn');
+            var compactBtn = document.getElementById('compactBtn');
+
             function applyTheme() {
-                document.body.style.background = themes[themeIndex].bg;
-                profileCard.style.background = themes[themeIndex].card;
+                var t = themes[themeIndex];
+                document.body.style.background = t.bg;
+                profileCard.style.background = t.card;
+                // Меняем цвет текста в зависимости от светлой/тёмной темы
+                if (t.light) {
+                    document.body.style.color = '#1a1a1a';
+                    profileCard.style.color = '#1a1a1a';
+                    themeBtn.style.background = 'rgba(0,0,0,0.2)';
+                    themeBtn.style.color = '#1a1a1a';
+                    compactBtn.style.background = 'rgba(0,0,0,0.2)';
+                    compactBtn.style.color = '#1a1a1a';
+                    scrollTopBtn.style.background = 'rgba(0,0,0,0.2)';
+                    scrollTopBtn.style.color = '#1a1a1a';
+                } else {
+                    document.body.style.color = 'white';
+                    profileCard.style.color = 'white';
+                    themeBtn.style.background = 'rgba(124, 58, 237, 0.4)';
+                    themeBtn.style.color = 'white';
+                    compactBtn.style.background = 'rgba(124, 58, 237, 0.4)';
+                    compactBtn.style.color = 'white';
+                    scrollTopBtn.style.background = 'rgba(124, 58, 237, 0.4)';
+                    scrollTopBtn.style.color = 'white';
+                }
             }
             applyTheme();
-            document.getElementById('themeBtn').addEventListener('click', function() {
+            themeBtn.addEventListener('click', function() {
                 themeIndex = (themeIndex + 1) % themes.length;
                 localStorage.setItem('themeIndex', themeIndex);
                 applyTheme();
@@ -810,7 +843,6 @@
             });
 
             // Компактный режим
-            var compactBtn = document.getElementById('compactBtn');
             if (localStorage.getItem('compact') === '1') profileCard.classList.add('compact');
             compactBtn.addEventListener('click', function() {
                 profileCard.classList.toggle('compact');
