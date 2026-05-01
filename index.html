@@ -9,7 +9,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body {
             background: #05070d;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', sans-serif;
             overflow-x: hidden;
             overflow-y: auto;
             color: white;
@@ -17,10 +17,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
             transition: background 0.5s ease;
-            cursor: default;
         }
         canvas { position: fixed; top: 0; left: 0; z-index: 0; }
         .container {
@@ -45,11 +42,6 @@
             0% { transform: translateY(0) scale(1); opacity: 1; }
             100% { transform: translateY(-80px) scale(1.5); opacity: 0; }
         }
-        @keyframes heartFly {
-            0% { transform: translate(0, 0) scale(0.5); opacity: 1; }
-            100% { transform: translate(var(--dx), var(--dy)) scale(1.5); opacity: 0; }
-        }
-
         .profile-card {
             width: 100%;
             background: rgba(15, 18, 30, 0.55);
@@ -62,29 +54,43 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            text-align: center;
             border: 1px solid rgba(255,255,255,0.08);
             transition: transform 0.1s ease-out, background 0.5s ease;
             position: relative;
             overflow: hidden;
         }
-        .compact {
-            padding: 20px 18px;
-        }
+        .compact { padding: 20px 18px; }
         .compact .info-grid { margin-top: 14px; }
         .compact .links-grid { margin-top: 10px; }
         .compact .music-section { margin-top: 10px; }
         .compact .actions { margin-top: 12px; }
         .compact .name { font-size: 22px; }
         .compact .avatar { width: 100px; height: 100px; }
+        .compact .mountains-block { transform: scale(0.8); margin-top: -5px; margin-bottom: -5px; }
 
-        .heart-burst {
+        .scroll-top-btn {
             position: fixed;
+            bottom: 140px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(124, 58, 237, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            opacity: 0;
             pointer-events: none;
-            font-size: 28px;
-            z-index: 999;
-            animation: heartFly 1s forwards;
         }
+        .scroll-top-btn.visible { opacity: 1; pointer-events: auto; }
+        .scroll-top-btn:hover { background: rgba(124, 58, 237, 0.7); transform: scale(1.1); }
 
         .avatar-wrapper { position: relative; cursor: pointer; }
         .avatar {
@@ -201,11 +207,77 @@
             transition: all 0.2s; cursor: default;
         }
         .tag:hover { background: rgba(124, 58, 237, 0.3); transform: scale(1.05); }
+
+        /* БЛОК ГОР */
+        .mountains-block {
+            width: 100%;
+            height: 80px;
+            margin-top: 14px;
+            opacity: 0;
+            animation: fadeInUp 0.6s 0.63s forwards;
+            position: relative;
+            overflow: hidden;
+            border-radius: 14px;
+            background-size: 200% 100%;
+            transition: background 0.5s ease;
+        }
+        .mountains-svg {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: auto;
+        }
+        .sun-moon {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            font-size: 20px;
+            transition: all 0.5s ease;
+            filter: drop-shadow(0 0 4px rgba(255,255,255,0.6));
+        }
+
+        /* ГАЛЕРЕЯ – теперь все подписи "Утренние горы" */
+        .gallery {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+            opacity: 0;
+            animation: fadeInUp 0.6s 0.65s forwards;
+        }
+        .gallery-item {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background-size: cover;
+            background-position: center;
+            border: 2px solid rgba(255,255,255,0.1);
+            cursor: pointer;
+            transition: all 0.25s;
+            position: relative;
+            overflow: hidden;
+        }
+        .gallery-item:hover {
+            transform: scale(1.08);
+            border-color: #a78bfa;
+            box-shadow: 0 0 12px rgba(124,58,237,0.4);
+        }
+        .gallery-item::after {
+            content: "🔍";
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .gallery-item:hover::after { opacity: 1; }
+
         .links-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             gap: 10px; margin-top: 18px; width: 100%;
-            opacity: 0; animation: fadeInUp 0.6s 0.65s forwards;
+            opacity: 0; animation: fadeInUp 0.6s 0.68s forwards;
         }
         .link-btn {
             display: flex; flex-direction: column;
@@ -245,6 +317,7 @@
         .toast.green { background: rgba(34, 197, 94, 0.9); }
         .toast.pink { background: rgba(236, 72, 153, 0.9); }
         .toast.blue { background: rgba(59, 130, 246, 0.9); }
+        .toast.orange { background: rgba(251, 146, 60, 0.9); }
 
         .theme-btn, .compact-btn {
             position: fixed;
@@ -412,12 +485,8 @@
         .btn-write:hover { background: rgba(99, 102, 241, 0.5); transform: translateY(-2px); }
         .btn-share { background: rgba(255,255,255,0.05); color: #c4b5fd; }
         .btn-share:hover { background: rgba(255,255,255,0.12); color: white; transform: translateY(-2px); }
-        .btn-random { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
-        .btn-random:hover { background: rgba(34, 197, 94, 0.4); transform: translateY(-2px); }
         .btn-greet { background: rgba(251, 146, 60, 0.2); color: #fdba74; }
         .btn-greet:hover { background: rgba(251, 146, 60, 0.4); transform: translateY(-2px); }
-        .btn-compact-toggle { background: rgba(255,255,255,0.04); color: #8b8fa6; }
-        .btn-compact-toggle:hover { background: rgba(255,255,255,0.1); color: white; transform: translateY(-2px); }
 
         .easter-egg {
             position: fixed;
@@ -431,7 +500,7 @@
         }
         .easter-egg.show { transform: translate(-50%, -50%) scale(1); }
         .stats-row {
-            display: flex; gap: 14px; margin-top: 12px;
+            display: flex; gap: 12px; margin-top: 10px;
             font-size: 11px; color: #8b8fa6;
             opacity: 0; animation: fadeInUp 0.6s 0.68s forwards;
             justify-content: center;
@@ -443,6 +512,7 @@
     <div id="easterEgg" class="easter-egg">🕊️</div>
     <button id="themeBtn" class="theme-btn">🎨</button>
     <button id="compactBtn" class="compact-btn">📦</button>
+    <button id="scrollTopBtn" class="scroll-top-btn">⬆</button>
     <audio id="audioPlayer"></audio>
     <canvas id="bg"></canvas>
 
@@ -468,6 +538,22 @@
                 <span class="tag">💻 Код</span>
                 <span class="tag">📷 Фото</span>
                 <span class="tag">🌙 Ночь</span>
+            </div>
+
+            <!-- ЖИВОЙ БЛОК ГОР -->
+            <div class="mountains-block" id="mountainsBlock">
+                <svg class="mountains-svg" viewBox="0 0 400 80" preserveAspectRatio="none">
+                    <polygon points="0,80 0,40 50,20 100,45 150,10 200,35 250,15 300,30 350,5 400,25 400,80" fill="rgba(124,58,237,0.3)"/>
+                    <polygon points="0,80 0,55 70,30 120,50 180,20 240,45 300,25 360,15 400,35 400,80" fill="rgba(79,70,229,0.25)"/>
+                </svg>
+                <span class="sun-moon" id="sunMoon">🌙</span>
+            </div>
+
+            <!-- МИНИ-ГАЛЕРЕЯ (все подписи "Утренние горы") -->
+            <div class="gallery">
+                <div class="gallery-item" style="background-image: url('gallery1.jpg');" onclick="showToast('Утренние горы', 'purple')"></div>
+                <div class="gallery-item" style="background-image: url('gallery2.jpg');" onclick="showToast('Утренние горы', 'purple')"></div>
+                <div class="gallery-item" style="background-image: url('gallery3.jpg');" onclick="showToast('Утренние горы', 'purple')"></div>
             </div>
 
             <div class="info-grid">
@@ -529,7 +615,6 @@
             <div class="actions">
                 <a class="btn btn-write" href="https://t.me/FsbAidol" target="_blank">✉️ Написать</a>
                 <button class="btn btn-share" onclick="shareProfile()">📋 Поделиться</button>
-                <button class="btn btn-random" id="randomTrackBtn">🎲 Случайный</button>
                 <button class="btn btn-greet" id="greetBtn">👋 Привет</button>
             </div>
         </div>
@@ -543,17 +628,14 @@
             resize(); window.addEventListener('resize', resize);
 
             var mouse = { x: -1000, y: -1000 };
-            document.addEventListener('mousemove', function(e) {
-                mouse.x = e.clientX;
-                mouse.y = e.clientY;
-            });
+            document.addEventListener('mousemove', function(e) { mouse.x = e.clientX; mouse.y = e.clientY; });
 
             var particles = [];
-            for (var i = 0; i < 120; i++) {
+            for (var i = 0; i < 100; i++) {
                 particles.push({
                     x: Math.random() * canvas.width, y: Math.random() * canvas.height,
-                    dx: (Math.random() - 0.5) * 2.5, dy: (Math.random() - 0.5) * 2.5,
-                    r: Math.random() * 2 + 1.2
+                    dx: (Math.random() - 0.5) * 2.2, dy: (Math.random() - 0.5) * 2.2,
+                    r: Math.random() * 1.8 + 1
                 });
             }
 
@@ -564,11 +646,11 @@
                         var dx = particles[a].x - particles[b].x;
                         var dy = particles[a].y - particles[b].y;
                         var dist = Math.sqrt(dx * dx + dy * dy);
-                        if (dist < 85) {
+                        if (dist < 80) {
                             ctx.beginPath(); ctx.moveTo(particles[a].x, particles[a].y);
                             ctx.lineTo(particles[b].x, particles[b].y);
-                            ctx.strokeStyle = "rgba(255,255,255," + (0.12 - dist/800) + ")";
-                            ctx.lineWidth = 0.5; ctx.stroke();
+                            ctx.strokeStyle = "rgba(255,255,255," + (0.1 - dist/900) + ")";
+                            ctx.lineWidth = 0.4; ctx.stroke();
                         }
                     }
                 }
@@ -576,48 +658,69 @@
                     var dx = mouse.x - p.x;
                     var dy = mouse.y - p.y;
                     var distToMouse = Math.sqrt(dx * dx + dy * dy);
-                    if (distToMouse < 120) {
-                        p.x -= dx * 0.01;
-                        p.y -= dy * 0.01;
-                    }
+                    if (distToMouse < 100) { p.x -= dx * 0.008; p.y -= dy * 0.008; }
                     p.x += p.dx; p.y += p.dy;
                     if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
                     if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
                     ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                    ctx.fillStyle = "rgba(255,255,255,0.8)"; ctx.fill();
+                    ctx.fillStyle = "rgba(255,255,255,0.75)"; ctx.fill();
                 });
                 requestAnimationFrame(draw);
             }
             draw();
 
-            // Параллакс
             var profileCard = document.getElementById('profileCard');
             document.addEventListener('mousemove', function(e) {
-                var x = (e.clientX / window.innerWidth - 0.5) * 10;
-                var y = (e.clientY / window.innerHeight - 0.5) * 10;
-                profileCard.style.transform = 'perspective(1000px) rotateY(' + x + 'deg) rotateX(' + (-y) + 'deg) scale(1)';
+                var x = (e.clientX / window.innerWidth - 0.5) * 8;
+                var y = (e.clientY / window.innerHeight - 0.5) * 8;
+                profileCard.style.transform = 'perspective(800px) rotateY(' + x + 'deg) rotateX(' + (-y) + 'deg) scale(1)';
             });
 
-            // Двойной клик для лайка
-            profileCard.addEventListener('dblclick', function(e) {
-                var heart = document.createElement('div');
-                heart.className = 'heart-burst';
-                heart.textContent = '❤️';
-                heart.style.left = e.clientX + 'px';
-                heart.style.top = e.clientY + 'px';
-                heart.style.setProperty('--dx', (Math.random() - 0.5) * 100 + 'px');
-                heart.style.setProperty('--dy', -Math.random() * 80 - 20 + 'px');
-                document.body.appendChild(heart);
-                setTimeout(function() { heart.remove(); }, 1000);
-                showToast('Лайк! ❤️', 'pink');
-            });
+            // Живое небо в горах
+            function updateSky() {
+                var hour = new Date().getHours();
+                var block = document.getElementById('mountainsBlock');
+                var icon = document.getElementById('sunMoon');
+                if (hour >= 6 && hour < 10) {
+                    block.style.background = 'linear-gradient(180deg, #ff9a9e 0%, #fecfef 100%)';
+                    icon.textContent = '🌅';
+                } else if (hour >= 10 && hour < 17) {
+                    block.style.background = 'linear-gradient(180deg, #4facfe 0%, #00f2fe 100%)';
+                    icon.textContent = '☀️';
+                } else if (hour >= 17 && hour < 20) {
+                    block.style.background = 'linear-gradient(180deg, #fa8231 0%, #f7b731 100%)';
+                    icon.textContent = '🌇';
+                } else if (hour >= 20 || hour < 5) {
+                    block.style.background = 'linear-gradient(180deg, #0f0c29 0%, #302b63 50%, #24243e 100%)';
+                    icon.textContent = '🌙';
+                } else {
+                    block.style.background = 'linear-gradient(180deg, #2c3e50 0%, #3498db 100%)';
+                    icon.textContent = '🌙';
+                }
+            }
+            updateSky();
+            setInterval(updateSky, 60000);
 
-            // Темы с сохранением
+            // Скролл
+            var scrollTopBtn = document.getElementById('scrollTopBtn');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 300) scrollTopBtn.classList.add('visible');
+                else scrollTopBtn.classList.remove('visible');
+            });
+            scrollTopBtn.addEventListener('click', function() { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+            // Темы
             var themes = [
-                { bg: '#05070d', card: 'rgba(15, 18, 30, 0.55)' },
-                { bg: '#0d0510', card: 'rgba(30, 15, 35, 0.55)' },
-                { bg: '#100a05', card: 'rgba(35, 20, 15, 0.55)' },
-                { bg: '#050d0a', card: 'rgba(15, 30, 25, 0.55)' }
+                { bg: '#05070d', card: 'rgba(15, 18, 30, 0.55)', name: 'Midnight' },
+                { bg: '#0d0510', card: 'rgba(30, 15, 35, 0.55)', name: 'Void' },
+                { bg: '#100a05', card: 'rgba(35, 20, 15, 0.55)', name: 'Sunset' },
+                { bg: '#050d0a', card: 'rgba(15, 30, 25, 0.55)', name: 'Forest' },
+                { bg: '#1a0a1a', card: 'rgba(40, 20, 40, 0.55)', name: 'Sakura' },
+                { bg: '#0a0a1a', card: 'rgba(20, 20, 40, 0.55)', name: 'Ocean' },
+                { bg: '#1a1a0a', card: 'rgba(40, 40, 20, 0.55)', name: 'Desert' },
+                { bg: '#0a1a1a', card: 'rgba(20, 40, 40, 0.55)', name: 'Arctic' },
+                { bg: '#1a0a0a', card: 'rgba(40, 20, 20, 0.55)', name: 'Candy' },
+                { bg: '#0a0a0a', card: 'rgba(20, 20, 20, 0.55)', name: 'Obsidian' }
             ];
             var themeIndex = parseInt(localStorage.getItem('themeIndex')) || 0;
             function applyTheme() {
@@ -629,23 +732,25 @@
                 themeIndex = (themeIndex + 1) % themes.length;
                 localStorage.setItem('themeIndex', themeIndex);
                 applyTheme();
-                showToast('Тема ' + (themeIndex + 1) + ' / ' + themes.length, 'green');
+                showToast('Тема: ' + themes[themeIndex].name + ' (' + (themeIndex+1) + '/' + themes.length + ')', 'green');
             });
 
             // Компактный режим
             var compactBtn = document.getElementById('compactBtn');
+            if (localStorage.getItem('compact') === '1') profileCard.classList.add('compact');
             compactBtn.addEventListener('click', function() {
                 profileCard.classList.toggle('compact');
-                showToast(profileCard.classList.contains('compact') ? 'Компактный режим' : 'Обычный режим', 'blue');
+                var isCompact = profileCard.classList.contains('compact') ? '1' : '0';
+                localStorage.setItem('compact', isCompact);
+                showToast(isCompact === '1' ? 'Компактный режим' : 'Обычный режим', 'blue');
             });
 
             // Пасхалка
             var konamiCode = [];
-            var secret = [38, 38, 40, 40];
             document.addEventListener('keydown', function(e) {
                 konamiCode.push(e.keyCode);
-                if (konamiCode.length > secret.length) konamiCode.shift();
-                if (konamiCode.join(',') === secret.join(',')) {
+                if (konamiCode.length > 4) konamiCode.shift();
+                if (konamiCode.join(',') === '38,38,40,40') {
                     var egg = document.getElementById('easterEgg');
                     egg.classList.add('show');
                     setTimeout(function() { egg.classList.remove('show'); }, 2000);
@@ -662,235 +767,119 @@
                 toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 2000);
             };
 
-            // Копирование
             window.copyText = function(text) {
-                navigator.clipboard.writeText(text).then(function() {
-                    showToast('📋 Скопировано: ' + text, 'blue');
-                });
+                navigator.clipboard.writeText(text).then(function() { showToast('📋 Скопировано: ' + text, 'blue'); });
             };
             window.shareProfile = function() {
-                var url = window.location.href;
-                navigator.clipboard.writeText(url).then(function() {
-                    showToast('🔗 Ссылка на профиль скопирована!', 'green');
-                });
+                navigator.clipboard.writeText(window.location.href).then(function() { showToast('🔗 Ссылка скопирована!', 'green'); });
             };
 
             // Часы
             function updateClock() {
-                var now = new Date();
-                var time = now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-                document.getElementById('clockDisplay').textContent = time;
+                document.getElementById('clockDisplay').textContent = new Date().toLocaleTimeString('ru-RU', { hour:'2-digit', minute:'2-digit' });
             }
-            updateClock();
-            setInterval(updateClock, 10000);
+            updateClock(); setInterval(updateClock, 10000);
 
             // Возраст
             function updateAge() {
-                var birth = new Date(2011, 11, 19);
-                var now = new Date();
-                var diff = now - birth;
-                var years = Math.floor(diff / (365.25 * 24 * 60 * 60 * 1000));
-                var months = Math.floor((diff % (365.25 * 24 * 60 * 60 * 1000)) / (30.44 * 24 * 60 * 60 * 1000));
-                document.getElementById('ageBadge').textContent = years + ' л ' + months + ' мес';
+                var diff = Date.now() - new Date(2011, 11, 19);
+                var y = Math.floor(diff / (365.25*24*60*60*1000));
+                var m = Math.floor((diff % (365.25*24*60*60*1000)) / (30.44*24*60*60*1000));
+                document.getElementById('ageBadge').textContent = y + ' л ' + m + ' мес';
             }
             updateAge();
 
             // Батарея
             if ('getBattery' in navigator) {
                 navigator.getBattery().then(function(b) {
-                    function updateBattery() {
-                        var pct = Math.round(b.level * 100);
-                        document.getElementById('batteryFill').style.width = pct + '%';
-                        document.getElementById('batteryPercent').textContent = pct + '%';
+                    function upd() {
+                        var p = Math.round(b.level*100);
+                        document.getElementById('batteryFill').style.width = p+'%';
+                        document.getElementById('batteryPercent').textContent = p+'%';
                     }
-                    updateBattery();
-                    b.addEventListener('levelchange', updateBattery);
+                    upd(); b.addEventListener('levelchange', upd);
                 });
             }
 
             // Печатная машинка
             var bioText = '🕊️ 14 лет • код, люблю фотографировать горы';
-            var bioEl = document.getElementById('bioText');
-            var bioIndex = 0;
-            function typeBio() {
-                if (bioIndex < bioText.length) {
-                    bioEl.textContent += bioText.charAt(bioIndex);
-                    bioIndex++;
-                    setTimeout(typeBio, 40);
-                }
-            }
-            setTimeout(typeBio, 800);
+            var bioEl = document.getElementById('bioText'), bioIdx = 0;
+            function type() { if (bioIdx < bioText.length) { bioEl.textContent += bioText[bioIdx]; bioIdx++; setTimeout(type, 40); } }
+            setTimeout(type, 800);
 
-            // Таймер сессии
+            // Сессия
             var sessionStart = Date.now();
-            function updateSessionTimer() {
-                var elapsed = Math.floor((Date.now() - sessionStart) / 1000);
-                var m = Math.floor(elapsed / 60);
-                var s = elapsed % 60;
-                document.getElementById('sessionTimer').textContent = '🕐 ' + m + 'м ' + s + 'с';
+            function updSession() {
+                var e = Math.floor((Date.now()-sessionStart)/1000);
+                document.getElementById('sessionTimer').textContent = '🕐 ' + Math.floor(e/60) + 'м ' + (e%60) + 'с';
             }
-            setInterval(updateSessionTimer, 1000);
-            updateSessionTimer();
+            setInterval(updSession, 1000); updSession();
 
-            // Кнопка "Привет"
-            var greetings = ['Привет! 👋', 'Хай! ✌️', 'Здарова! 🤙', 'Ку! 🖖', 'Hello! 🌍', 'Bonjour! 🥐'];
+            // Приветствия
+            var greetings = ['Привет! 👋','Хай! ✌️','Здарова! 🤙','Ку! 🖖','Hello! 🌍','Bonjour! 🥐','Hola! 🌮'];
             document.getElementById('greetBtn').addEventListener('click', function() {
-                var g = greetings[Math.floor(Math.random() * greetings.length)];
-                showToast(g, 'purple');
+                showToast(greetings[Math.floor(Math.random()*greetings.length)], 'purple');
             });
 
-            // Реакции на аватар
-            var avatarWrapper = document.getElementById('avatarWrapper');
-            var emojis = ['❤️', '🔥', '💜', '✨', '🕊️', '🌟'];
-            avatarWrapper.addEventListener('click', function() {
-                for (var i = 0; i < 5; i++) {
-                    var span = document.createElement('span');
-                    span.className = 'floating-emoji';
-                    span.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-                    span.style.left = (Math.random() * 60 - 10) + 'px';
-                    span.style.top = (Math.random() * 40) + 'px';
-                    avatarWrapper.appendChild(span);
-                    setTimeout(function() { span.remove(); }, 1000);
+            // Аватар
+            var emojis = ['❤️','🔥','💜','✨','🕊️','🌟'];
+            document.getElementById('avatarWrapper').addEventListener('click', function() {
+                for (var i=0;i<5;i++) {
+                    var s = document.createElement('span'); s.className='floating-emoji';
+                    s.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+                    s.style.left=(Math.random()*60-10)+'px'; s.style.top=(Math.random()*40)+'px';
+                    this.appendChild(s); setTimeout(function(){s.remove();},1000);
                 }
-                showToast('Аватарка кликнута!', 'pink');
+                showToast('Аватарка кликнута!','pink');
             });
 
             // Треки
             var tracksData = [
-                { id: '1', title: 'Ash on My Saddle', artist: 'Dead Bone Music', yt: 'https://www.youtube.com/watch?v=jeiOWmc2Trw' },
-                { id: '2', title: '31-я весна', artist: 'Ночные Снайперы', yt: 'https://www.youtube.com/watch?v=OKORZwSEMNE' },
-                { id: '3', title: 'Finale', artist: 'Toby Fox', yt: 'https://www.youtube.com/watch?v=5qajT8lS2ok' },
-                { id: '4', title: 'Whiskey, Lead & Revenge', artist: 'Dark Country', yt: 'https://www.youtube.com/watch?v=cg3rT28ia4E' },
-                { id: '5', title: 'Mary On A Cross (slowed + reverb)', artist: 'Ghost', yt: 'https://www.youtube.com/watch?v=us9plufTqks' },
-                { id: '6', title: 'Силуэт (из к/ф «Алиса в Стране...»)', artist: 'Ваня Дмитриенко & Аня Пересильд', yt: 'https://www.youtube.com/watch?v=DRYzImN_bDM' }
+                {id:'1',title:'Ash on My Saddle',artist:'Dead Bone Music',yt:'https://www.youtube.com/watch?v=jeiOWmc2Trw'},
+                {id:'2',title:'31-я весна',artist:'Ночные Снайперы',yt:'https://www.youtube.com/watch?v=OKORZwSEMNE'},
+                {id:'3',title:'Finale',artist:'Toby Fox',yt:'https://www.youtube.com/watch?v=5qajT8lS2ok'},
+                {id:'4',title:'Whiskey, Lead & Revenge',artist:'Dark Country',yt:'https://www.youtube.com/watch?v=cg3rT28ia4E'},
+                {id:'5',title:'Mary On A Cross (slowed + reverb)',artist:'Ghost',yt:'https://www.youtube.com/watch?v=us9plufTqks'},
+                {id:'6',title:'Силуэт',artist:'Ваня Дмитриенко & Аня Пересильд',yt:'https://www.youtube.com/watch?v=DRYzImN_bDM'}
             ];
-
-            var trackList = document.getElementById('trackList');
-            tracksData.forEach(function(t, index) {
-                var div = document.createElement('div');
-                div.className = 'track';
-                div.setAttribute('data-id', t.id);
-                div.innerHTML =
-                    '<span class="track-num">' + String(index + 1).padStart(2, '0') + '</span>' +
-                    '<div class="track-info">' +
-                        '<div class="track-title">' +
-                            '<span class="title-text">' + t.title + '</span>' +
-                            '<div class="eq-bars" style="display:none"><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div></div>' +
-                            '<span class="time-display">0:00 / -:--</span>' +
-                        '</div>' +
-                        '<div class="track-artist">' + t.artist + '</div>' +
-                        '<div class="progress-bar"><div class="progress-fill"></div></div>' +
-                    '</div>' +
-                    '<div class="track-controls">' +
-                        '<button class="t-btn btn-play">Слушать</button>' +
-                        '<button class="t-btn btn-link" data-url="' + t.yt + '">🔗</button>' +
-                    '</div>';
-                trackList.appendChild(div);
+            var tl = document.getElementById('trackList');
+            tracksData.forEach(function(t,i){
+                var d=document.createElement('div'); d.className='track'; d.setAttribute('data-id',t.id);
+                d.innerHTML='<span class="track-num">'+String(i+1).padStart(2,'0')+'</span><div class="track-info"><div class="track-title"><span class="title-text">'+t.title+'</span><div class="eq-bars" style="display:none"><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div></div><span class="time-display">0:00 / -:--</span></div><div class="track-artist">'+t.artist+'</div><div class="progress-bar"><div class="progress-fill"></div></div></div><div class="track-controls"><button class="t-btn btn-play">Слушать</button><button class="t-btn btn-link" data-url="'+t.yt+'">🔗</button></div>';
+                tl.appendChild(d);
             });
 
-            var audio = document.getElementById('audioPlayer');
-            var currentTrackId = null;
-            var progressInterval = null;
-
-            function formatTime(sec) {
-                if (isNaN(sec)) return '-:--';
-                var m = Math.floor(sec / 60);
-                var s = Math.floor(sec % 60);
-                return m + ':' + String(s).padStart(2, '0');
-            }
-            function clearPrevious() {
-                if (currentTrackId) {
-                    var prev = document.querySelector('.track[data-id="' + currentTrackId + '"]');
-                    if (prev) {
-                        prev.classList.remove('playing');
-                        var btn = prev.querySelector('.btn-play');
-                        if (btn) btn.textContent = 'Слушать';
-                        var eq = prev.querySelector('.eq-bars');
-                        if (eq) eq.style.display = 'none';
-                        var pb = prev.querySelector('.progress-bar');
-                        if (pb) pb.classList.remove('active');
-                        var td = prev.querySelector('.time-display');
-                        if (td) td.textContent = '0:00 / -:--';
-                    }
+            var audio=document.getElementById('audioPlayer'), currentTrackId=null, progressInterval=null;
+            function formatTime(s){if(isNaN(s))return'-:--';var m=Math.floor(s/60),sec=Math.floor(s%60);return m+':'+String(sec).padStart(2,'0');}
+            function clearPrev(){
+                if(currentTrackId){
+                    var p=document.querySelector('.track[data-id="'+currentTrackId+'"]');
+                    if(p){p.classList.remove('playing');var b=p.querySelector('.btn-play');if(b)b.textContent='Слушать';var e=p.querySelector('.eq-bars');if(e)e.style.display='none';var pb=p.querySelector('.progress-bar');if(pb)pb.classList.remove('active');var td=p.querySelector('.time-display');if(td)td.textContent='0:00 / -:--';}
                 }
             }
-            function updateProgress() {
-                if (!currentTrackId) return;
-                var track = document.querySelector('.track[data-id="' + currentTrackId + '"]');
-                if (!track) return;
-                var fill = track.querySelector('.progress-fill');
-                var td = track.querySelector('.time-display');
-                if (fill && td && audio.duration) {
-                    fill.style.width = (audio.currentTime / audio.duration * 100) + '%';
-                    td.textContent = formatTime(audio.currentTime) + ' / ' + formatTime(audio.duration);
-                }
+            function updProgress(){
+                if(!currentTrackId)return;
+                var t=document.querySelector('.track[data-id="'+currentTrackId+'"]');
+                if(!t)return;var f=t.querySelector('.progress-fill'),td=t.querySelector('.time-display');
+                if(f&&td&&audio.duration){f.style.width=(audio.currentTime/audio.duration*100)+'%';td.textContent=formatTime(audio.currentTime)+' / '+formatTime(audio.duration);}
             }
-
-            document.querySelectorAll('.track').forEach(function(track) {
-                var playBtn = track.querySelector('.btn-play');
-                var linkBtn = track.querySelector('.btn-link');
-                var trackId = track.getAttribute('data-id');
-                var eqBars = track.querySelector('.eq-bars');
-                var progressBar = track.querySelector('.progress-bar');
-
-                playBtn.addEventListener('click', function() {
-                    var fileUrl = 'track' + trackId + '.mp3';
-                    if (currentTrackId === trackId) {
-                        if (audio.paused) {
-                            audio.play();
-                            this.textContent = 'Пауза';
-                            track.classList.add('playing');
-                            if (eqBars) eqBars.style.display = 'flex';
-                            if (progressBar) progressBar.classList.add('active');
-                        } else {
-                            audio.pause();
-                            this.textContent = 'Слушать';
-                            track.classList.remove('playing');
-                            if (eqBars) eqBars.style.display = 'none';
-                        }
-                    } else {
-                        clearPrevious();
-                        audio.src = fileUrl;
-                        audio.play();
-                        this.textContent = 'Пауза';
-                        track.classList.add('playing');
-                        if (eqBars) eqBars.style.display = 'flex';
-                        if (progressBar) progressBar.classList.add('active');
-                        currentTrackId = trackId;
-                        if (progressInterval) clearInterval(progressInterval);
-                        progressInterval = setInterval(updateProgress, 200);
+            document.querySelectorAll('.track').forEach(function(t){
+                var pb=t.querySelector('.btn-play'),lb=t.querySelector('.btn-link'),tid=t.getAttribute('data-id'),eq=t.querySelector('.eq-bars'),pbar=t.querySelector('.progress-bar');
+                pb.addEventListener('click',function(){
+                    var url='track'+tid+'.mp3';
+                    if(currentTrackId===tid){
+                        if(audio.paused){audio.play();this.textContent='Пауза';t.classList.add('playing');if(eq)eq.style.display='flex';if(pbar)pbar.classList.add('active');}
+                        else{audio.pause();this.textContent='Слушать';t.classList.remove('playing');if(eq)eq.style.display='none';}
+                    }else{
+                        clearPrev();audio.src=url;audio.play();this.textContent='Пауза';t.classList.add('playing');if(eq)eq.style.display='flex';if(pbar)pbar.classList.add('active');
+                        currentTrackId=tid;if(progressInterval)clearInterval(progressInterval);progressInterval=setInterval(updProgress,200);
                     }
                 });
-                linkBtn.addEventListener('click', function() {
-                    window.open(this.getAttribute('data-url'), '_blank');
-                });
+                lb.addEventListener('click',function(){window.open(this.getAttribute('data-url'),'_blank');});
             });
-
-            audio.onended = function() {
-                clearPrevious();
-                if (progressInterval) clearInterval(progressInterval);
-                currentTrackId = null;
-            };
-            audio.onerror = function() {
-                clearPrevious();
-                if (progressInterval) clearInterval(progressInterval);
-                currentTrackId = null;
-                showToast('Ошибка загрузки трека', 'pink');
-            };
-
-            document.getElementById('musicToggle').addEventListener('click', function() {
-                this.classList.toggle('expanded');
-                document.getElementById('musicContent').classList.toggle('open');
-            });
-
-            document.getElementById('randomTrackBtn').addEventListener('click', function() {
-                var tracks = document.querySelectorAll('.track');
-                var randomIndex = Math.floor(Math.random() * tracks.length);
-                var randomTrack = tracks[randomIndex];
-                var playBtn = randomTrack.querySelector('.btn-play');
-                if (playBtn) playBtn.click();
-                showToast('🎲 Случайный трек: ' + tracksData[randomIndex].title, 'blue');
-            });
+            audio.onended=function(){clearPrev();if(progressInterval)clearInterval(progressInterval);currentTrackId=null;};
+            audio.onerror=function(){clearPrev();if(progressInterval)clearInterval(progressInterval);currentTrackId=null;showToast('Ошибка загрузки трека','pink');};
+            document.getElementById('musicToggle').addEventListener('click',function(){this.classList.toggle('expanded');document.getElementById('musicContent').classList.toggle('open');});
         })();
     </script>
 </body>
